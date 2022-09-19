@@ -1,0 +1,21 @@
+<div class="login-box">
+    <h2>Login</h2>
+    <form>
+      <div class="user-box">
+        
+        <input type="text" #email="ngModel" [(ngModel)]="usuario.nome" name="login" id="login" required="">
+        <label>Username</label>
+        <div  *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+           Email deve ser informado
+        </div>
+      </div>
+      <div class="user-box">
+        <input type="password"  #senha="ngModel" [(ngModel)]="usuario.senha" name="senha" id="senha" required="">
+        <label>Password</label>
+        <div  *ngIf="senha.invalid && (senha.dirty || senha.touched)" class="alert alert-danger">
+          Senha deve ser informado
+       </div>
+      </div>
+      <button type="submit" [disabled]="senha.invalid || email.invalid" (click)="login()" class="btn btn-primary" >Acessar</button>
+    </form>
+  </div>

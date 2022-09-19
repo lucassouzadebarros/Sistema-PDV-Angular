@@ -1,0 +1,187 @@
+<main class="c-main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12"></div>
+            <!-- ngFor for para percorrer o array de erros e se existir erros imprimir na tela -->
+            <div class="alert alert-danger" role="alert" *ngFor="let erro of mensagemErros">
+                {{ erro }}
+            </div>
+        </div>
+        <div class="mat-elevation-z8">
+            <mat-card>
+                <mat-card-title>
+                    <mat-icon>color_lens</mat-icon>
+                    Usuario
+                </mat-card-title>
+                <mat-tab-group mat-align-tabs="start" #tabGroup>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <mat-icon>add</mat-icon>
+                            Cadastrar usuario
+                        </ng-template>
+                        <!-- CADASATRANDO OBJETO INICIO -->
+                        <mat-card>
+                            <form [formGroup]="formulario" (ngSubmit)="submit()">
+                            <div  class = "example-container">
+                                <!--passa qual é o formulario e o evento-->
+                                <mat-form-field class="full-width2">
+                                    <mat-label>CODIGO</mat-label>
+                                    <input formControlName="id" matInput readonly>
+                                </mat-form-field>
+
+                                </div>  
+                                <div  class= "example-container">
+                                <mat-form-field class="full-width2" appearance="fill">
+                                    <mat-label>Nome</mat-label>
+                                    <input formControlName="name" matInput placeholder="Digite seu nome" minlength="3"
+                                        maxlength="50" required>
+                                </mat-form-field>
+                                
+                                <mat-form-field class="full-width3" appearance="fill">
+                                    <mat-label>Email</mat-label>
+                                    <input formControlName="email" matInput placeholder="Digite seu nome" minlength="3"
+                                        maxlength="50" required>
+                                </mat-form-field>
+                                
+								</div>
+								<div  class = "example-container">
+								
+								<mat-form-field class="full-width2" appearance="fill">
+                                    <mat-label>Senha</mat-label>
+                                    <input formControlName="senha" type="password" matInput placeholder="Digite seu nome" minlength="3"
+                                        maxlength="50" required>
+                                </mat-form-field>
+                                
+				
+                                <mat-form-field class="full-width3" appearance="fill">
+                                    <mat-label>Situação do produto</mat-label>
+                                    <mat-select formControlName="status" required>
+                                        <mat-option value="true">Ativo</mat-option>
+                                        <mat-option value="false">Inativo</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formulario.controls.status.hasError('required')">Status
+                                        é obrigatório!</mat-error>
+                                </mat-form-field>
+                               </div>
+                               
+                               
+                                <mat-form-field class="full-width2" appearance="fill">
+                                    <mat-label>Acesso</mat-label>  
+                                        <mat-select formControlName="teste">
+                                        <mat-option value=1>Administrador</mat-option>
+                                        <mat-option value=2>Funcionário</mat-option>
+                                        
+                                    </mat-select>
+                                </mat-form-field>
+                               
+                               
+                                <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <!-- habilita desabilita botão com o forma validate -->
+                                        <button (click)="limparFormulario()" mat-raised-button>
+                                            <mat-icon>insert_drive_file</mat-icon>
+                                            Limpar
+                                        </button>
+                                    </div>
+                                    <div class="col-6" align="right">
+                                        <!-- habilita desabilita botão com o forma validate -->
+                                        <button [disabled]="!formulario.valid" mat-raised-button color="primary">
+                                            <mat-icon>save</mat-icon>
+                                            Salvar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="esp-top">
+                                <!-- verifica se tem erros no preenchimento do campo e se inicio o preenchimento -->
+                                <div *ngIf="formulario.controls.name.errors && !formulario.controls.name.pristine"
+                                    class="alert alert-warning" role="alert">
+                                    Campo nome deve conter entre 3 e 50 caracteres!
+                                </div>
+                                
+                            </div>
+                        </mat-card>
+                    </mat-tab>
+                    <!-- CADASATRANDO OBJETO INICIO -->
+
+                    <!-- LISTANDO TODAS INICIO -->
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <mat-icon>list</mat-icon>
+                            Listar usuarios
+                        </ng-template>
+                        <mat-card>
+                            <!-- //inicio da tabela -->
+                            <table mat-table [dataSource]="usuarios2" class="full-width" >
+                                <!-- Coluna ID -->
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef> id </th>
+                                    <td mat-cell mat-cell *matCellDef="let usuario"> {{ usuario.id }}  </td>
+                                </ng-container>
+
+                                <!-- Coluna Nome -->
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef> name </th>
+                                    <td mat-cell mat-cell *matCellDef="let usuario"> {{ usuario.nome }}  </td>
+                                </ng-container>
+
+                                <!-- Coluna preco -->
+                                <ng-container matColumnDef="email">
+                                    <th mat-header-cell *matHeaderCellDef>email</th>
+                                    <td mat-cell mat-cell *matCellDef="let usuario"> {{ usuario.email }}  </td>
+                                </ng-container>
+                                
+                                <!-- coluna status -->
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef>status</th>
+                                    <td mat-cell *matCellDef="let usuario">
+                                        <div *ngIf="usuario.status==true; else elseBlock">
+                                            <p class="text-primary">Ativo</p>
+                                        </div>
+                                        <ng-template #elseBlock>
+                                            <p class="text-danger">Inativo</p>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                
+                                 
+                                 <ng-container matColumnDef="excluir">
+                                    <th mat-header-cell *matHeaderCellDef>Excluir</th>
+                                    <td mat-cell *matCellDef="let usuario">
+                                        <button (click)="openDialog(usuario.id)" mat-icon-button color="warn">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="editar">
+                                    <th mat-header-cell *matHeaderCellDef>Editar</th>
+                                    <td mat-cell *matCellDef="let usuario">
+                                        <button (click)="editar(usuario.id)" (click)="tabGroup.selectedIndex = 0"
+                                            mat-icon-button color="accent">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+
+                                <!-- definir como vai ser as linhas e a ordem das colunas -->
+                                <tr mat-header-row *matHeaderRowDef="ordemColunasTabela"></tr>
+                                <tr mat-row *matRowDef="let row; columns: ordemColunasTabela;"></tr>
+                            </table>
+
+                            <!-- paginação -->
+                            <mat-paginator 
+                                [pageSizeOptions]="pageSizeOptions" (page)="paginar($event)">
+                                <!-- evento de paginar -->
+                            </mat-paginator>
+
+                        </mat-card>
+                    </mat-tab>
+                    <!-- LISTANDO TODAS FIM -->
+                </mat-tab-group>
+            </mat-card>
+        </div>
+    </div>
+
+</main>
